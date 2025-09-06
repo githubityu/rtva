@@ -20,7 +20,8 @@ import {
     Tag,
     Badge,
 } from 'antd';
-import LocalUtils from "../utils/LocalUtils.ts"; // 导入 LocalUtils
+import LocalUtils from "../utils/LocalUtils.ts";
+import AppUtils from "../utils/appUtils.ts"; // 导入 LocalUtils
 
 const { darkAlgorithm } = theme;
 
@@ -28,10 +29,10 @@ const { darkAlgorithm } = theme;
 const zodiacMeta = Array.from({ length: 12 }, (_, i) => ({
     id: i + 1,
     name: [
-        'Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake',
-        'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'
+        '鼠', '牛', '虎', '兔', '龙', '蛇',
+        '马', '羊', '猴', '鸡', '狗', '猪'
     ][i],
-    image: `/images/zodiac/${i + 1}.png`, // 确保图片路径正确
+    image: AppUtils.getPicById(i), // 确保图片路径正确
 }));
 
 export default function AntdZodiacPage() {
@@ -114,7 +115,7 @@ export default function AntdZodiacPage() {
                                     {/* 错误显示区域 */}
                                     {!isDrawing && !drawnZodiacId && drawError && (
                                         <Typography.Text type="danger" style={{ display: 'block', textAlign: 'center', marginTop: '10px' }}>
-                                            Error: {drawError.message}
+                                            Error: {drawError.shortMessage}
                                         </Typography.Text>
                                     )}
 
