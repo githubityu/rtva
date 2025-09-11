@@ -1,4 +1,3 @@
-
 export default class LocalUtils {
     static readonly USDT_CONTRACT_ADDRESS = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F' as const;
     static readonly TOKEN_SWAP_CONTRACT_ADDRESS = '0xf5B6e4Daad320BD8b45d7Ad0Fb9Ab484BfAf610a' as const;
@@ -15,6 +14,7 @@ export default class LocalUtils {
 
     static readonly GOVERNOR_ADDRESS = '0x...'; // 你的 Governor 合约地址
     static readonly FACTORY_ADDRESS = '0x...';  // 你的 ContractFactory 合约地址
+    static readonly TOKEN_NAME = 'LBB';  // 你的 ContractFactory 合约地址
 
 // 最小化的 ABI，只包含我们需要的函数
     static readonly GOVERNOR_ABI = [
@@ -22,12 +22,12 @@ export default class LocalUtils {
             "type": "function",
             "name": "propose",
             "inputs": [
-                { "name": "targets", "type": "address[]", "internalType": "address[]" },
-                { "name": "values", "type": "uint256[]", "internalType": "uint256[]" },
-                { "name": "calldatas", "type": "bytes[]", "internalType": "bytes[]" },
-                { "name": "description", "type": "string", "internalType": "string" }
+                {"name": "targets", "type": "address[]", "internalType": "address[]"},
+                {"name": "values", "type": "uint256[]", "internalType": "uint256[]"},
+                {"name": "calldatas", "type": "bytes[]", "internalType": "bytes[]"},
+                {"name": "description", "type": "string", "internalType": "string"}
             ],
-            "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+            "outputs": [{"name": "", "type": "uint256", "internalType": "uint256"}],
             "stateMutability": "nonpayable"
         }
     ] as const;
@@ -36,29 +36,28 @@ export default class LocalUtils {
         {
             "type": "function",
             "name": "deployContract",
-            "inputs": [{ "name": "bytecode", "type": "bytes", "internalType": "bytes" }],
-            "outputs": [{ "name": "deployedAddress", "type": "address", "internalType": "address" }],
+            "inputs": [{"name": "bytecode", "type": "bytes", "internalType": "bytes"}],
+            "outputs": [{"name": "deployedAddress", "type": "address", "internalType": "address"}],
             "stateMutability": "nonpayable"
         }
     ] as const;
-
 
 
     static readonly USDT_ABI = [
         {
             inputs: [],
             name: 'decimals',
-            outputs: [{ name: '', type: 'uint8' }],
+            outputs: [{name: '', type: 'uint8'}],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { name: 'spender', type: 'address' },
-                { name: 'value', type: 'uint256' },
+                {name: 'spender', type: 'address'},
+                {name: 'value', type: 'uint256'},
             ],
             name: 'approve',
-            outputs: [{ name: '', type: 'bool' }],
+            outputs: [{name: '', type: 'bool'}],
             stateMutability: 'nonpayable',
             type: 'function',
         },
@@ -66,17 +65,17 @@ export default class LocalUtils {
             "type": "function",
             "name": "transfer",
             "inputs": [
-                { "name": "to", "type": "address" },
-                { "name": "amount", "type": "uint256" }
+                {"name": "to", "type": "address"},
+                {"name": "amount", "type": "uint256"}
             ],
-            "outputs": [{ "name": "", "type": "bool" }],
+            "outputs": [{"name": "", "type": "bool"}],
             "stateMutability": "nonpayable"
         }
     ] as const;
 
     static readonly TOKEN_SWAP_ABI = [
         {
-            inputs: [{ name: '_usdtAmount', type: 'uint256' }],
+            inputs: [{name: '_usdtAmount', type: 'uint256'}],
             name: 'buyTokens',
             outputs: [],
             stateMutability: 'nonpayable',
@@ -90,14 +89,14 @@ export default class LocalUtils {
             "type": "function",
             "name": "name",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "string" }],
+            "outputs": [{"name": "", "type": "string"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "nonces",
-            "inputs": [{ "name": "owner", "type": "address" }],
-            "outputs": [{ "name": "", "type": "uint256" }],
+            "inputs": [{"name": "owner", "type": "address"}],
+            "outputs": [{"name": "", "type": "uint256"}],
             "stateMutability": "view"
         },
         // 'permit' 函数本身不是由前端直接调用的，
@@ -107,13 +106,13 @@ export default class LocalUtils {
             "type": "function",
             "name": "permit",
             "inputs": [
-                { "name": "owner", "type": "address" },
-                { "name": "spender", "type": "address" },
-                { "name": "value", "type": "uint256" },
-                { "name": "deadline", "type": "uint256" },
-                { "name": "v", "type": "uint8" },
-                { "name": "r", "type": "bytes32" },
-                { "name": "s", "type": "bytes32" }
+                {"name": "owner", "type": "address"},
+                {"name": "spender", "type": "address"},
+                {"name": "value", "type": "uint256"},
+                {"name": "deadline", "type": "uint256"},
+                {"name": "v", "type": "uint8"},
+                {"name": "r", "type": "bytes32"},
+                {"name": "s", "type": "bytes32"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -126,11 +125,11 @@ export default class LocalUtils {
             "type": "function",
             "name": "depositWithPermit",
             "inputs": [
-                { "name": "amount", "type": "uint256" },
-                { "name": "deadline", "type": "uint256" },
-                { "name": "v", "type": "uint8" },
-                { "name": "r", "type": "bytes32" },
-                { "name": "s", "type": "bytes32" }
+                {"name": "amount", "type": "uint256"},
+                {"name": "deadline", "type": "uint256"},
+                {"name": "v", "type": "uint8"},
+                {"name": "r", "type": "bytes32"},
+                {"name": "s", "type": "bytes32"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -139,8 +138,8 @@ export default class LocalUtils {
         {
             "type": "function",
             "name": "deposits",
-            "inputs": [{ "name": "", "type": "address" }],
-            "outputs": [{ "name": "", "type": "uint256" }],
+            "inputs": [{"name": "", "type": "address"}],
+            "outputs": [{"name": "", "type": "uint256"}],
             "stateMutability": "view"
         },
         // --- 事件（可选，但对于监听很有用）---
@@ -148,8 +147,8 @@ export default class LocalUtils {
             "type": "event",
             "name": "Deposited",
             "inputs": [
-                { "name": "user", "type": "address", "indexed": true },
-                { "name": "amount", "type": "uint256", "indexed": false }
+                {"name": "user", "type": "address", "indexed": true},
+                {"name": "amount", "type": "uint256", "indexed": false}
             ],
             "anonymous": false
         }
@@ -161,11 +160,11 @@ export default class LocalUtils {
             "type": "function",
             "name": "depositWithPermit",
             "inputs": [
-                { "name": "amount", "type": "uint256" },
-                { "name": "deadline", "type": "uint256" },
-                { "name": "v", "type": "uint8" },
-                { "name": "r", "type": "bytes32" },
-                { "name": "s", "type": "bytes32" }
+                {"name": "amount", "type": "uint256"},
+                {"name": "deadline", "type": "uint256"},
+                {"name": "v", "type": "uint8"},
+                {"name": "r", "type": "bytes32"},
+                {"name": "s", "type": "bytes32"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -174,28 +173,28 @@ export default class LocalUtils {
             "type": "function",
             "name": "balanceOfBatch",
             "inputs": [
-                { "name": "accounts", "type": "address[]" },
-                { "name": "ids", "type": "uint256[]" }
+                {"name": "accounts", "type": "address[]"},
+                {"name": "ids", "type": "uint256[]"}
             ],
-            "outputs": [{ "name": "", "type": "uint256[]" }],
+            "outputs": [{"name": "", "type": "uint256[]"}],
             "stateMutability": "view"
         },
         // --- 用于查询存款信息 ---
         {
             "type": "function",
             "name": "deposits",
-            "inputs": [{ "name": "", "type": "address" }],
-            "outputs": [{ "name": "", "type": "uint256" }],
+            "inputs": [{"name": "", "type": "address"}],
+            "outputs": [{"name": "", "type": "uint256"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "isApprovedForAll",
             "inputs": [
-                { "name": "account", "type": "address" },
-                { "name": "operator", "type": "address" }
+                {"name": "account", "type": "address"},
+                {"name": "operator", "type": "address"}
             ],
-            "outputs": [{ "name": "", "type": "bool" }],
+            "outputs": [{"name": "", "type": "bool"}],
             "stateMutability": "view"
         },
 
@@ -205,8 +204,8 @@ export default class LocalUtils {
             "type": "function",
             "name": "setApprovalForAll",
             "inputs": [
-                { "name": "operator", "type": "address" },
-                { "name": "approved", "type": "bool" }
+                {"name": "operator", "type": "address"},
+                {"name": "approved", "type": "bool"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -215,11 +214,11 @@ export default class LocalUtils {
             "type": "function",
             "name": "safeTransferFrom",
             "inputs": [
-                { "name": "from", "type": "address" },
-                { "name": "to", "type": "address" },
-                { "name": "id", "type": "uint256" },
-                { "name": "value", "type": "uint256" },
-                { "name": "data", "type": "bytes" }
+                {"name": "from", "type": "address"},
+                {"name": "to", "type": "address"},
+                {"name": "id", "type": "uint256"},
+                {"name": "value", "type": "uint256"},
+                {"name": "data", "type": "bytes"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -229,8 +228,8 @@ export default class LocalUtils {
             "type": "event",
             "name": "Deposited",
             "inputs": [
-                { "name": "user", "type": "address", "indexed": true },
-                { "name": "amount", "type": "uint256", "indexed": false }
+                {"name": "user", "type": "address", "indexed": true},
+                {"name": "amount", "type": "uint256", "indexed": false}
             ],
             "anonymous": false
         }
@@ -253,8 +252,8 @@ export default class LocalUtils {
             "type": "function",
             "name": "drawSpecificZodiac",
             "inputs": [
-                { "name": "_user", "type": "address" },
-                { "name": "_zodiacId", "type": "uint256" }
+                {"name": "_user", "type": "address"},
+                {"name": "_zodiacId", "type": "uint256"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -263,8 +262,8 @@ export default class LocalUtils {
             "type": "function",
             "name": "drawSpecificZodiacBatch",
             "inputs": [
-                { "name": "_users", "type": "address[]" },
-                { "name": "_zodiacIds", "type": "uint256[]" }
+                {"name": "_users", "type": "address[]"},
+                {"name": "_zodiacIds", "type": "uint256[]"}
             ],
             "outputs": [],
             "stateMutability": "nonpayable"
@@ -281,14 +280,14 @@ export default class LocalUtils {
         {
             "type": "function",
             "name": "setDrawPrice",
-            "inputs": [{ "name": "_newPrice", "type": "uint256" }],
+            "inputs": [{"name": "_newPrice", "type": "uint256"}],
             "outputs": [],
             "stateMutability": "nonpayable"
         },
         {
             "type": "function",
             "name": "setMyTokenThreshold",
-            "inputs": [{ "name": "_newThreshold", "type": "uint256" }],
+            "inputs": [{"name": "_newThreshold", "type": "uint256"}],
             "outputs": [],
             "stateMutability": "nonpayable"
         },
@@ -302,7 +301,7 @@ export default class LocalUtils {
         {
             "type": "function",
             "name": "withdrawMyToken",
-            "inputs": [{ "name": "_amount", "type": "uint256" }],
+            "inputs": [{"name": "_amount", "type": "uint256"}],
             "outputs": [],
             "stateMutability": "nonpayable"
         },
@@ -316,7 +315,7 @@ export default class LocalUtils {
         {
             "type": "function",
             "name": "transferOwnership",
-            "inputs": [{ "name": "newOwner", "type": "address" }],
+            "inputs": [{"name": "newOwner", "type": "address"}],
             "outputs": [],
             "stateMutability": "nonpayable"
         },
@@ -326,42 +325,42 @@ export default class LocalUtils {
             "type": "function",
             "name": "drawPrice",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "uint256" }],
+            "outputs": [{"name": "", "type": "uint256"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "myToken",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "address" }],
+            "outputs": [{"name": "", "type": "address"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "myTokenThreshold",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "uint256" }],
+            "outputs": [{"name": "", "type": "uint256"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "NUM_ZODIACS",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "uint256" }],
+            "outputs": [{"name": "", "type": "uint256"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "owner",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "address" }],
+            "outputs": [{"name": "", "type": "address"}],
             "stateMutability": "view"
         },
         {
             "type": "function",
             "name": "zodiacNFT",
             "inputs": [],
-            "outputs": [{ "name": "", "type": "address" }],
+            "outputs": [{"name": "", "type": "address"}],
             "stateMutability": "view"
         },
 
@@ -370,8 +369,8 @@ export default class LocalUtils {
             "type": "event",
             "name": "Draw",
             "inputs": [
-                { "name": "user", "type": "address", "indexed": true },
-                { "name": "zodiacId", "type": "uint256", "indexed": true }
+                {"name": "user", "type": "address", "indexed": true},
+                {"name": "zodiacId", "type": "uint256", "indexed": true}
             ],
             "anonymous": false
         },
@@ -379,8 +378,8 @@ export default class LocalUtils {
             "type": "event",
             "name": "Exchange",
             "inputs": [
-                { "name": "user", "type": "address", "indexed": true },
-                { "name": "myTokenAmount", "type": "uint256", "indexed": false }
+                {"name": "user", "type": "address", "indexed": true},
+                {"name": "myTokenAmount", "type": "uint256", "indexed": false}
             ],
             "anonymous": false
         },
@@ -388,28 +387,34 @@ export default class LocalUtils {
             "type": "event",
             "name": "OwnershipTransferred",
             "inputs": [
-                { "name": "previousOwner", "type": "address", "indexed": true },
-                { "name": "newOwner", "type": "address", "indexed": true }
+                {"name": "previousOwner", "type": "address", "indexed": true},
+                {"name": "newOwner", "type": "address", "indexed": true}
             ],
             "anonymous": false
         },
 
         // --- Custom Errors ---
-        { "type": "error", "name": "IncorrectFee", "inputs": [] },
-        { "type": "error", "name": "IncompleteSet", "inputs": [] },
-        { "type": "error", "name": "InsufficientMyTokenBalance", "inputs": [
-                { "name": "required", "type": "uint256" },
-                { "name": "current", "type": "uint256" }
-            ]},
-        { "type": "error", "name": "NotApprovedForAll", "inputs": [] },
-        { "type": "error", "name": "NotEnoughMyTokenInContract", "inputs": [] },
-        { "type": "error", "name": "TransferFailed", "inputs": [] },
-        { "type": "error", "name": "OwnableInvalidOwner", "inputs": [
-                { "name": "owner", "type": "address" }
-            ]},
-        { "type": "error", "name": "OwnableUnauthorizedAccount", "inputs": [
-                { "name": "account", "type": "address" }
-            ]}
+        {"type": "error", "name": "IncorrectFee", "inputs": []},
+        {"type": "error", "name": "IncompleteSet", "inputs": []},
+        {
+            "type": "error", "name": "InsufficientMyTokenBalance", "inputs": [
+                {"name": "required", "type": "uint256"},
+                {"name": "current", "type": "uint256"}
+            ]
+        },
+        {"type": "error", "name": "NotApprovedForAll", "inputs": []},
+        {"type": "error", "name": "NotEnoughMyTokenInContract", "inputs": []},
+        {"type": "error", "name": "TransferFailed", "inputs": []},
+        {
+            "type": "error", "name": "OwnableInvalidOwner", "inputs": [
+                {"name": "owner", "type": "address"}
+            ]
+        },
+        {
+            "type": "error", "name": "OwnableUnauthorizedAccount", "inputs": [
+                {"name": "account", "type": "address"}
+            ]
+        }
     ] as const;
 
 }

@@ -18,7 +18,7 @@ import {
     Spin,
     Result,
     Tag,
-    Badge,
+    Badge, Col, Row,
 } from 'antd';
 import LocalUtils from "../utils/LocalUtils.ts";
 import AppUtils from "../utils/appUtils.ts"; // 导入 LocalUtils
@@ -74,7 +74,7 @@ export default function AntdZodiacPage() {
         if (isLoadingMyTokenBalance || isLoadingThreshold) return { text: 'Checking balance...', disabled: true };
         if (isMyTokenBalanceInsufficient) {
             const thresholdFormatted = myTokenThreshold ? formatUnits(myTokenThreshold, 18) : '...';
-            return { text: `Need at least ${thresholdFormatted} MTK`, disabled: true };
+            return { text: `Need at least ${thresholdFormatted} ${LocalUtils.TOKEN_NAME}`, disabled: true };
         }
         if (isDrawing) return { text: drawStatus, disabled: true };
         return { text: 'Draw Now', disabled: isExchanging };
@@ -125,41 +125,53 @@ export default function AntdZodiacPage() {
                                     )}
                                 </Card>
 
-                                {/* --- NFT 收藏展示 --- */}
                                 <Card type="inner" title="2. My Zodiac Collection">
                                     {isLoadingBalance ? <Flex justify="center"><Spin /></Flex> : (
-                                        <Flex wrap="wrap" gap="large" justify="center">
+                                        // 使用 Row 和 Col 替代 Flex
+                                        // gutter={[水平间距, 垂直间距]}
+                                        <Row gutter={[16, 24]} justify="center">
                                             {zodiacMeta.map(z => {
                                                 const owned = ownedZodiacs.find(o => o.id === z.id)?.balance ?? 0;
                                                 return (
-                                                    <Flex key={z.id} vertical align="center" gap="small" style={{ opacity: owned > 0 ? 1 : 0.3, minWidth: '70px' }}>
-                                                        <Badge count={owned} color="blue" offset={[-10, 10]} style={{ boxShadow: 'none' }}>
-                                                            <img src={z.image} alt={z.name} width={50} style={{ borderRadius: '8px', background: '#333' }} />
-                                                        </Badge>
-                                                        <Tag>{z.name}</Tag>
-                                                    </Flex>
+                                                    <Col key={z.id} xs={6} sm={6} md={4} lg={4}>
+                                                        <Flex vertical align="center" gap="small" style={{ opacity: owned > 0 ? 1 : 0.3 }}>
+                                                            <Badge count={owned} color="blue" offset={[-10, 10]} style={{ boxShadow: 'none' }}>
+                                                                <img src={z.image} alt={z.name} width={50} style={{ borderRadius: '8px', background: '#333' }} />
+                                                            </Badge>
+                                                            <Tag>{z.name}</Tag>
+                                                        </Flex>
+                                                    </Col>
                                                 );
                                             })}
-                                        </Flex>
+                                        </Row>
                                     )}
                                 </Card>
 
                                 {/* --- 兑换区域 --- */}
                                 <Card type="inner" title="3. Exchange for MyToken">
-                                    <Button
-                                        block
-                                        onClick={executeExchange}
-                                        loading={isExchanging}
-                                        disabled={!hasCompleteSet || isDrawing}
-                                        size="large"
-                                    >
-                                        {isExchanging ? exchangeStatus : 'Exchange Full Set (12 NFTs) for 1 MTK'}
-                                    </Button>
+                                    {/* 使用 Flex 布局将按钮和辅助文本组合在一起 */}
+                                    <Flex vertical gap="small">
+                                        <Button
+                                            block
+                                            onClick={executeExchange}
+                                            loading={isExchanging}
+                                            disabled={!hasCompleteSet || isDrawing}
+                                            size="large"
+                                        >
+                                            {/* 按钮文本变得非常简洁 */}
+                                            {isExchanging ? exchangeStatus : "Exchange Full Set"}
+                                        </Button>
+
+                                        {/* 将详细信息作为辅助文本 */}
+                                        <Typography.Text type="secondary" style={{ textAlign: 'center' }}>
+                                            Exchange 12 NFTs for 1 {LocalUtils.TOKEN_NAME}
+                                        </Typography.Text>
+                                    </Flex>
 
                                     {/* 错误显示区域 */}
                                     {!isExchanging && exchangeError && (
                                         <Typography.Text type="danger" style={{ display: 'block', textAlign: 'center', marginTop: '10px' }}>
-                                            Error: {exchangeError.message}
+                                            Error: {exchangeError.shortMessage}
                                         </Typography.Text>
                                     )}
 

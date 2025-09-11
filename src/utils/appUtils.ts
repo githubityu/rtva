@@ -1,17 +1,17 @@
 export default class AppUtils {
     static picCids = [
-        "Qmd2KJvQaarbgiofYUECyKduHJvYdgEAEQ9ZBaLGJZg92Z",//鼠
-        "QmQprE4RUeAcZkVCGVNABsKnrsBiRtFsXBdiJ69NZMhg51",//牛
-        "QmZ9anLXGNeigbSAW3LcEr4FmMPWZT9BUwZoHvijkq8HHR",//虎
-        "Qmb67Duxc1iKrvpre14fgWUkoSS4qDosb6KFprb4bPagy8",//兔
-        "QmSf8iAspWUf8vPMtxdT6eFg7oeqhzQWytGs62fG1f1geW",//龙
-        "QmWVc2fWPd2FRTEbiDcf9QJ216rwHF2rhqo7pBPCHUBnjS",//蛇
-        "QmR2i46t7gttEN9kKcnb1sr47RUWn3zxQUA9aem9LyBpNW",//马
-        "Qme2ijqmeh1THmZ5HrjN6UQvRkRGWk9mgzmk8MzvaAAy4A",//羊
-        "QmaciWdo7iLoxw2PqCUNAtGC9b1q228JCtHzqcPDWUkphY",//猴
-        "QmWAn22fq8gAwhEYNDXsq88KfzhpjLxbJsDLVNgfnHNbZy",//鸡
-        "QmcCqCsoxhrESPS3bXUqyhAq9BqhsS38ikryJEFkS6yTxV",//狗
-        "QmeC1MX3yxwJvrW7evXUHcdFhzVVcHAMhQgZuNUkvDqAHj",//猪
+        "bafybeig2ftu7um2ptkfsj4x6lggpwzwj3noaeyfr4v55vpg2y6w7w3rroi",//鼠
+        "bafybeibe6cuh5ambwkrt6eqn7wlhby4yh37rh6azj5kjf7hscmtkcsoleq",//牛
+        "bafybeifatk5btjjefmbnvzdoiitbrkf5bjsuggteuw6ikcxfswpj2exd6a",//虎
+        "bafybeif5nyziddshkwdsxsuak44meqx3gbsfm6xkqzcd2jfvuzm3dwtrxm",//兔
+        "bafybeicaflopyzi3ddxyqwg3dywqrn4a7auymbtfcr5gdf4pahvmohuzdm",//龙
+        "bafybeidzfcyt6ifxabqoesbqdb5wzeo7npd2stdzybcwwkgwg6japht46e",//蛇
+        "bafybeibh7jrv2bgtabl7w6nmknhaolrqgo33lrtw2eqdwx2vipr7jdtbnm",//马
+        "bafybeihjeml4qglujyfar5aw5e65nlkcjwoxcf5e3xmrdushdurkbows54",//羊
+        "bafybeifwnhk5ezpjdlflpxew7py35tl6weyzeefmsyfj6p2xgudsuc7ukm",//猴
+        "bafybeidukxzz63nqueizxlrbebquqpd5fnz7y6thqr26eliot552n2ejva",//鸡
+        "bafybeigoallkdkw7mk5ztz2blhdsw2dm2gu7h34qa6desq27vbhp77sxvi",//狗
+        "bafybeihlqqnwdsdjvvyrx22whcuzsrui224pnajd3izkvjftb6vdnwefvy",//猪
     ]
 
     static getPicById(id: number): string {
