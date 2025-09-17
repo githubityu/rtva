@@ -133,7 +133,7 @@ export default function AntdZodiacPage() {
 
     return (
         <Flex align="center" justify="center" style={{minHeight: '100vh',}}>
-            <Card title="希腊神 NFT 抽奖 & 兑换" style={{width: '100%', maxWidth: '550px'}}>
+            <Card title="希腊神 NFT 抽奖 & 兑换" style={{width: '100%', maxWidth: '750px'}}>
                 <Space direction="vertical" size="large" style={{width: '100%'}}>
                     <Flex justify="center">
                         <w3m-button/>
@@ -208,13 +208,13 @@ export default function AntdZodiacPage() {
                                                     {zodiacMeta.map(z => {
                                                         const owned = ownedZodiacs.find(o => o.id === z.id)?.balance ?? 0;
                                                         return (
-                                                            <Col key={z.id} xs={6} sm={6} md={4} lg={4}>
+                                                            <Col key={z.id} xs={8} sm={8} md={6} lg={6}>
                                                                 <Flex vertical align="center" gap="small"
                                                                       style={{opacity: owned > 0 ? 1 : 0.3}}>
                                                                     <Badge count={owned} color="blue"
                                                                            offset={[-10, 10]}
                                                                            style={{boxShadow: 'none'}}>
-                                                                        <img src={z.image} alt={z.name} width={50}
+                                                                        <img src={z.image} alt={z.name} width={100}
                                                                              style={{
                                                                                  borderRadius: '8px',
                                                                                  background: '#333'
