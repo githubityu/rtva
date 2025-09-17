@@ -1,3 +1,5 @@
+// hooks/useZodiacExchange.ts
+
 import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { type BaseError, type Address } from 'viem';
@@ -39,13 +41,10 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
 
     const {
         isLoading: isConfirmingExchange,
+        isSuccess: isExchangeConfirmed, // 解构出最终的成功状态
         error: exchangeReceiptError
     } = useWaitForTransactionReceipt({
         hash: exchangeHash,
-        onSuccess: () => {
-            setStatus('Exchange successful!');
-            onExchangeSuccess?.(); // 执行成功回调
-        }
     });
 
     /**
@@ -65,12 +64,8 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
             args: [LocalUtils.ZODIAC_EXCHANGER_ADDRESS, true],
         };
 
-        console.log("--- executeExchange called! ---");
-        console.log("Preparing to call 'setApprovalForAll' with args:", approveArgs);
-
         try {
             approve(approveArgs);
-            console.log("'approve' function triggered. Waiting for wallet popup...");
         } catch (e) {
             console.error("A synchronous error occurred when trying to trigger 'approve':", e);
             setStatus('Error preparing approval transaction.');
@@ -82,7 +77,6 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
      * 声明式的流程控制：当授权交易被确认后，自动触发第二步 -> 兑换。
      */
     useEffect(() => {
-        // 确保只在 isApproveConfirmed 首次变为 true 时触发
         if (isApproveConfirmed && !exchangeHash && !isExchanging) {
             setStatus('Approval confirmed! Executing exchange...');
             const exchangeArgs = {
@@ -90,10 +84,19 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
                 abi: LocalUtils.ZODIAC_EXCHANGER_ABI,
                 functionName: 'exchangeForMyToken' as const,
             };
-            console.log("Approval confirmed. Preparing to call 'exchange' with args:", exchangeArgs);
             exchange(exchangeArgs);
         }
     }, [isApproveConfirmed, exchange, exchangeHash, isExchanging]);
+
+    /**
+     * 监听最终兑换成功事件，并执行回调
+     */
+    useEffect(() => {
+        if (isExchangeConfirmed) {
+            setStatus('Exchange successful!');
+            onExchangeSuccess?.(); // 执行传入的回调，比如 refetchBalances
+        }
+    }, [isExchangeConfirmed, onExchangeSuccess]);
 
     /**
      * 统一的状态和错误管理
@@ -114,6 +117,9 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
         else if (isConfirmingApprove) setStatus('1/2: Waiting for approval confirmation...');
         else if (isExchanging) setStatus('2/2: Exchanging in wallet...');
         else if (isConfirmingExchange) setStatus('2/2: Waiting for exchange confirmation...');
+        else if (isExchangeConfirmed) {
+            setStatus('Exchange successful!');
+        }
         else if (!approveHash && !exchangeHash) {
             setStatus('Ready to exchange.');
         }
@@ -121,7 +127,8 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
     }, [
         isApproving, isConfirmingApprove, isExchanging, isConfirmingExchange,
         approveHash, exchangeHash,
-        approveError, approveReceiptError, exchangeError, exchangeReceiptError
+        approveError, approveReceiptError, exchangeError, exchangeReceiptError,
+        isExchangeConfirmed
     ]);
 
     // 组合的加载状态，用于 UI
@@ -132,6 +139,7 @@ export function useZodiacExchange(onExchangeSuccess?: () => void) {
         isPending,
         status,
         hash: (exchangeHash || approveHash) as Address | undefined,
-        error
+        error,
+        isSuccess: isExchangeConfirmed, // 将最终的成功状态返回
     };
 }

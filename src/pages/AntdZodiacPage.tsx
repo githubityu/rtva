@@ -1,10 +1,17 @@
-import { useAccount, useBalance } from 'wagmi';
-import { useReadContract } from 'wagmi';
-import { formatUnits } from 'viem';
+'use client';
 
-import { useZodiacDraw } from '../hooks/useZodiacDraw';
-import { useZodiacExchange } from '../hooks/useZodiacExchange';
-import { useZodiacBalanceV2 } from "../hooks/useZodiacBalanceV2.ts";
+import React, {useEffect} from 'react';
+import {useAccount, useBalance, useReadContract} from 'wagmi';
+import {formatUnits} from 'viem';
+
+// 假设这些是你的自定义 Hooks
+import {useZodiacDraw} from '../hooks/useZodiacDraw';
+import {useZodiacExchange} from '../hooks/useZodiacExchange';
+import {useZodiacBalanceV2} from "../hooks/useZodiacBalanceV2.ts";
+
+// 假设这些是你的工具文件
+import LocalUtils from "../utils/LocalUtils.ts";
+import AppUtils from "../utils/appUtils.ts";
 
 // 导入所有需要的 Ant Design 组件
 import {
@@ -18,49 +25,86 @@ import {
     Spin,
     Result,
     Tag,
-    Badge, Col, Row,
+    Badge,
+    Col,
+    Row, App,
 } from 'antd';
-import LocalUtils from "../utils/LocalUtils.ts";
-import AppUtils from "../utils/appUtils.ts"; // 导入 LocalUtils
 
-const { darkAlgorithm } = theme;
+const {darkAlgorithm} = theme;
 
 // 定义生肖的元数据，用于 UI 展示
-const zodiacMeta = Array.from({ length: 12 }, (_, i) => ({
+const zodiacMeta = Array.from({length: 12}, (_, i) => ({
     id: i + 1,
     name: [
-        '鼠', '牛', '虎', '兔', '龙', '蛇',
-        '马', '羊', '猴', '鸡', '狗', '猪'
+        '宙斯', '赫拉', '波塞冬', '德墨忒尔', '雅典娜', '阿波罗',
+        '阿尔忒弥斯', ' 阿瑞斯', '阿芙罗狄忒', '赫菲斯托斯', '赫尔墨斯', '狄俄尼索斯'
     ][i],
     image: AppUtils.getPicById(i), // 确保图片路径正确
 }));
 
-export default function AntdZodiacPage() {
-    const { address, isConnected } = useAccount();
 
+export default function AntdZodiacPage() {
+    // ✨ 主组件只负责提供上下文
+    return (
+        <ConfigProvider
+            theme={{
+                algorithm: darkAlgorithm,
+                token: {
+                    colorPrimary: '#a042c1',
+                    colorBgContainer: 'black',
+                    colorBgElevated: '#2d2d2d'
+                }
+            }}
+        >
+            <App>
+                <ZodiacPageContent />
+            </App>
+        </ConfigProvider>
+    );
+}
+
+
+
+ function ZodiacPageContent() {
+    const {address, isConnected} = useAccount();
+    const { message: messageApi } = App.useApp();
     // --- 使用自定义 Hooks ---
     // 1. 获取用户 NFT 余额
-    const { ownedZodiacs, hasCompleteSet, isLoading: isLoadingBalance, refetchBalances } = useZodiacBalanceV2();
+    const {ownedZodiacs, hasCompleteSet, isLoading: isLoadingBalance, refetchBalances} = useZodiacBalanceV2();
 
     // 2. 获取用户 MyToken 余额和合约门槛 (用于前端防御性检查)
-    const { data: myTokenBalance, isLoading: isLoadingMyTokenBalance } = useBalance({
+    const {data: myTokenBalance, isLoading: isLoadingMyTokenBalance} = useBalance({
         address,
         token: LocalUtils.MY_TOKEN_ADDRESS,
-        query: { enabled: isConnected },
+        query: {enabled: isConnected},
     });
 
-    const { data: myTokenThreshold, isLoading: isLoadingThreshold } = useReadContract({
+    const {data: myTokenThreshold, isLoading: isLoadingThreshold} = useReadContract({
         address: LocalUtils.ZODIAC_EXCHANGER_ADDRESS,
         abi: LocalUtils.ZODIAC_EXCHANGER_ABI,
         functionName: 'myTokenThreshold',
-        query: { enabled: isConnected },
+        query: {enabled: isConnected},
     });
 
     // 3. 抽奖功能 Hook
-    const { executeDraw, isPending: isDrawing, status: drawStatus, drawnZodiacId, error: drawError } = useZodiacDraw(refetchBalances);
+    const {
+        executeDraw,
+        isPending: isDrawing,
+        status: drawStatus,
+        drawnZodiacId,
+        error: drawError
+    } = useZodiacDraw(refetchBalances);
 
     // 4. 兑换功能 Hook
-    const { executeExchange, isPending: isExchanging, status: exchangeStatus, error: exchangeError } = useZodiacExchange(refetchBalances);
+    // const { executeExchange, isPending: isExchanging, status: exchangeStatus, error: exchangeError } = useZodiacExchange(refetchBalances);
+
+    const {
+        executeExchange,
+        isPending: isExchanging,
+        status: exchangeStatus,
+        error: exchangeError,
+        isSuccess: isExchangeSuccess, // ✨ 成功获取！
+    } = useZodiacExchange(refetchBalances); // 传入 refetchBalances 作为成功回调
 
     // --- 前端防御性逻辑 ---
     // 计算用户 MyToken 余额是否不足
@@ -70,124 +114,130 @@ export default function AntdZodiacPage() {
 
     // 动态生成抽奖按钮的文本和禁用状态
     const getDrawButtonState = () => {
-        if (!isConnected) return { text: 'Connect Wallet to Draw', disabled: true };
-        if (isLoadingMyTokenBalance || isLoadingThreshold) return { text: 'Checking balance...', disabled: true };
+        if (!isConnected) return {text: '请连接钱包', disabled: true};
+        if (isLoadingMyTokenBalance || isLoadingThreshold) return {text: '查询余额中...', disabled: true};
         if (isMyTokenBalanceInsufficient) {
             const thresholdFormatted = myTokenThreshold ? formatUnits(myTokenThreshold, 18) : '...';
-            return { text: `Need at least ${thresholdFormatted} ${LocalUtils.TOKEN_NAME}`, disabled: true };
+            return {text: `至少需要 ${thresholdFormatted} LBB`, disabled: true};
         }
-        if (isDrawing) return { text: drawStatus, disabled: true };
-        return { text: 'Draw Now', disabled: isExchanging };
+        if (isDrawing) return {text: '开奖中...', disabled: true}; // drawStatus 可能也是英文，这里直接用中文
+        return {text: '立即抽奖', disabled: isExchanging};
     };
     const drawButtonState = getDrawButtonState();
 
+    useEffect(() => {
+        if (isExchangeSuccess) {
+            messageApi.success('恭喜！兑换成功！');
+        }
+    }, [isExchangeSuccess, messageApi]);
+
     return (
-        <ConfigProvider
-            theme={{
-                algorithm: darkAlgorithm,
-                token: {
-                    colorPrimary: '#a042c1',
-                    colorBgContainer: '#1f1f1f',
-                    colorBgElevated: '#2d2d2d'
-                }
-            }}
-        >
-            <Flex align="center" justify="center" style={{ minHeight: '100vh', background: '#141414', padding: '2rem' }}>
-                <Card title="Zodiac NFT Lottery & Exchange" style={{ width: '100%', maxWidth: '550px' }}>
-                    <Space direction="vertical" size="large" style={{ width: '100%' }}>
-                        <Flex justify="center"><w3m-button /></Flex>
+        <Flex align="center" justify="center" style={{minHeight: '100vh',}}>
+            <Card title="希腊神 NFT 抽奖 & 兑换" style={{width: '100%', maxWidth: '550px'}}>
+                <Space direction="vertical" size="large" style={{width: '100%'}}>
+                    <Flex justify="center">
+                        <w3m-button/>
+                    </Flex>
 
-                        {isConnected ? (
-                            <>
-                                {/* --- 抽奖区域 --- */}
-                                <Card type="inner" title="1. Draw a Zodiac NFT">
-                                    <Button
-                                        block
-                                        type="primary"
-                                        onClick={executeDraw}
-                                        loading={isDrawing}
-                                        disabled={drawButtonState.disabled}
-                                        size="large"
-                                    >
-                                        {drawButtonState.text} {/* 使用我们动态生成的文本 */}
-                                    </Button>
-
-                                    {/* 错误显示区域 */}
-                                    {!isDrawing && !drawnZodiacId && drawError && (
-                                        <Typography.Text type="danger" style={{ display: 'block', textAlign: 'center', marginTop: '10px' }}>
-                                            Error: {drawError.shortMessage}
-                                        </Typography.Text>
-                                    )}
-
-                                    {/* 成功显示区域 */}
-                                    {drawnZodiacId && !isDrawing && (
-                                        <Result status="success" title={`You got a ${zodiacMeta[drawnZodiacId - 1].name}!`} style={{ padding: '24px 0 0' }} />
-                                    )}
-                                </Card>
-
-                                <Card type="inner" title="2. My Zodiac Collection">
-                                    {isLoadingBalance ? <Flex justify="center"><Spin /></Flex> : (
-                                        // 使用 Row 和 Col 替代 Flex
-                                        // gutter={[水平间距, 垂直间距]}
-                                        <Row gutter={[16, 24]} justify="center">
-                                            {zodiacMeta.map(z => {
-                                                const owned = ownedZodiacs.find(o => o.id === z.id)?.balance ?? 0;
-                                                return (
-                                                    <Col key={z.id} xs={6} sm={6} md={4} lg={4}>
-                                                        <Flex vertical align="center" gap="small" style={{ opacity: owned > 0 ? 1 : 0.3 }}>
-                                                            <Badge count={owned} color="blue" offset={[-10, 10]} style={{ boxShadow: 'none' }}>
-                                                                <img src={z.image} alt={z.name} width={50} style={{ borderRadius: '8px', background: '#333' }} />
-                                                            </Badge>
-                                                            <Tag>{z.name}</Tag>
-                                                        </Flex>
-                                                    </Col>
-                                                );
-                                            })}
+                    {isConnected ? (
+                        <>
+                            <Card type="inner" bodyStyle={{padding: '10px'}} bordered={false}>
+                                <Flex vertical>
+                                    {/* 操作区域 */}
+                                    <Flex vertical gap="middle" style={{
+                                        padding: '10px',
+                                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                                    }}>
+                                        <Row gutter={16}>
+                                            <Col span={12}>
+                                                <Button
+                                                    block
+                                                    type="primary"
+                                                    onClick={executeDraw}
+                                                    loading={isDrawing}
+                                                    disabled={drawButtonState.disabled}
+                                                    size="large"
+                                                >
+                                                    {drawButtonState.text}
+                                                </Button>
+                                            </Col>
+                                            <Col span={12}>
+                                                <Button
+                                                    block
+                                                    onClick={executeExchange}
+                                                    loading={isExchanging}
+                                                    disabled={!hasCompleteSet || isDrawing}
+                                                    size="large"
+                                                >
+                                                    {isExchanging ? '兑换中...' : "兑换整套"}
+                                                </Button>
+                                            </Col>
                                         </Row>
-                                    )}
-                                </Card>
 
-                                {/* --- 兑换区域 --- */}
-                                <Card type="inner" title="3. Exchange for MyToken">
-                                    {/* 使用 Flex 布局将按钮和辅助文本组合在一起 */}
-                                    <Flex vertical gap="small">
-                                        <Button
-                                            block
-                                            onClick={executeExchange}
-                                            loading={isExchanging}
-                                            disabled={!hasCompleteSet || isDrawing}
-                                            size="large"
-                                        >
-                                            {/* 按钮文本变得非常简洁 */}
-                                            {isExchanging ? exchangeStatus : "Exchange Full Set"}
-                                        </Button>
+                                        {/* 抽奖结果和错误提示 */}
+                                        {!isDrawing && !drawnZodiacId && drawError && (
+                                            <Typography.Text type="danger" style={{textAlign: 'center'}}>
+                                                抽奖失败: {drawError.shortMessage}
+                                            </Typography.Text>
+                                        )}
+                                        {drawnZodiacId && !isDrawing && (
+                                            <Result status="success"
+                                                    title={`恭喜！你抽到了【${zodiacMeta[drawnZodiacId - 1].name}】!`}
+                                                    style={{padding: 0, marginTop: '16px'}}/>
+                                        )}
 
-                                        {/* 将详细信息作为辅助文本 */}
-                                        <Typography.Text type="secondary" style={{ textAlign: 'center' }}>
-                                            Exchange 12 NFTs for 1 {LocalUtils.TOKEN_NAME}
+                                        {/* 兑换状态和错误提示 */}
+                                        <Typography.Text type={hasCompleteSet ? 'success' : 'secondary'} style={{
+                                            textAlign: 'center',
+                                            marginTop: hasCompleteSet ? '0px' : '16px'
+                                        }}>
+                                            {hasCompleteSet ? "集齐所有希腊神！可以兑换了。" : "需要集齐全部12希腊神才能兑换。"}
                                         </Typography.Text>
+                                        {!isExchanging && exchangeError && (
+                                            <Typography.Text type="danger" style={{textAlign: 'center'}}>
+                                                兑换失败: {exchangeError.shortMessage}
+                                            </Typography.Text>
+                                        )}
                                     </Flex>
 
-                                    {/* 错误显示区域 */}
-                                    {!isExchanging && exchangeError && (
-                                        <Typography.Text type="danger" style={{ display: 'block', textAlign: 'center', marginTop: '10px' }}>
-                                            Error: {exchangeError.shortMessage}
-                                        </Typography.Text>
-                                    )}
-
-                                    <Typography.Text type={hasCompleteSet ? 'success' : 'secondary'} style={{ display: 'block', textAlign: 'center', marginTop: '8px' }}>
-                                        {hasCompleteSet ? "You have a complete set! Ready to exchange." : "You need to collect all 12 Zodiacs to exchange."}
-                                    </Typography.Text>
-                                </Card>
-                            </>
-                        ) : (
-                            <Typography.Text style={{ textAlign: 'center', display: 'block' }}>
-                                Please connect your wallet to participate.
-                            </Typography.Text>
-                        )}
-                    </Space>
-                </Card>
-            </Flex>
-        </ConfigProvider>
+                                    {/* NFT 收藏列表区域 */}
+                                    <div style={{padding: '24px 0px'}}>
+                                        {isLoadingBalance ?
+                                            <Flex justify="center"><Spin tip="加载中..."/></Flex> : (
+                                                <Row gutter={[16, 24]} justify="center">
+                                                    {zodiacMeta.map(z => {
+                                                        const owned = ownedZodiacs.find(o => o.id === z.id)?.balance ?? 0;
+                                                        return (
+                                                            <Col key={z.id} xs={6} sm={6} md={4} lg={4}>
+                                                                <Flex vertical align="center" gap="small"
+                                                                      style={{opacity: owned > 0 ? 1 : 0.3}}>
+                                                                    <Badge count={owned} color="blue"
+                                                                           offset={[-10, 10]}
+                                                                           style={{boxShadow: 'none'}}>
+                                                                        <img src={z.image} alt={z.name} width={50}
+                                                                             style={{
+                                                                                 borderRadius: '8px',
+                                                                                 background: '#333'
+                                                                             }}/>
+                                                                    </Badge>
+                                                                    <Tag>{z.name}</Tag>
+                                                                </Flex>
+                                                            </Col>
+                                                        );
+                                                    })}
+                                                </Row>
+                                            )}
+                                    </div>
+                                </Flex>
+                            </Card>
+                        </>
+                    ) : (
+                        <Typography.Text style={{textAlign: 'center', display: 'block'}}>
+                            请连接你的钱包来参与活动。
+                        </Typography.Text>
+                    )}
+                </Space>
+            </Card>
+        </Flex>
     );
 }

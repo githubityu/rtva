@@ -18,12 +18,13 @@ body {
   display: flex;
   place-items: center;
   min-height: 100vh;
+  background-color: black;
 }
 
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
   /* 确保 #root 占据整个宽度，以便 .container 可以正确居中 */
   width: 100%;
@@ -37,7 +38,6 @@ body {
   padding: 1.5rem; /* 稍微减小内边距 */
   background-color: #2f2f2f;
   border-radius: 12px;
-
   /* --- 响应式布局的关键修改 --- */
   width: 100%; /* 占据父容器的全部可用宽度 */
   max-width: 450px; /* 在大屏幕上，最大宽度不超过 450px */

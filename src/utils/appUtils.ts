@@ -1,17 +1,19 @@
 export default class AppUtils {
+    //7 bafkreicxsni3jnun2g5xf4mbmqqihnm5h4jdftzcerh2mj5f5dqganmymy
+
     static picCids = [
-        "bafybeig2ftu7um2ptkfsj4x6lggpwzwj3noaeyfr4v55vpg2y6w7w3rroi",//鼠
-        "bafybeibe6cuh5ambwkrt6eqn7wlhby4yh37rh6azj5kjf7hscmtkcsoleq",//牛
-        "bafybeifatk5btjjefmbnvzdoiitbrkf5bjsuggteuw6ikcxfswpj2exd6a",//虎
-        "bafybeif5nyziddshkwdsxsuak44meqx3gbsfm6xkqzcd2jfvuzm3dwtrxm",//兔
-        "bafybeicaflopyzi3ddxyqwg3dywqrn4a7auymbtfcr5gdf4pahvmohuzdm",//龙
-        "bafybeidzfcyt6ifxabqoesbqdb5wzeo7npd2stdzybcwwkgwg6japht46e",//蛇
-        "bafybeibh7jrv2bgtabl7w6nmknhaolrqgo33lrtw2eqdwx2vipr7jdtbnm",//马
-        "bafybeihjeml4qglujyfar5aw5e65nlkcjwoxcf5e3xmrdushdurkbows54",//羊
-        "bafybeifwnhk5ezpjdlflpxew7py35tl6weyzeefmsyfj6p2xgudsuc7ukm",//猴
-        "bafybeidukxzz63nqueizxlrbebquqpd5fnz7y6thqr26eliot552n2ejva",//鸡
-        "bafybeigoallkdkw7mk5ztz2blhdsw2dm2gu7h34qa6desq27vbhp77sxvi",//狗
-        "bafybeihlqqnwdsdjvvyrx22whcuzsrui224pnajd3izkvjftb6vdnwefvy",//猪
+        "bafkreigxhzl2anozhfezcejdjipkv6x6tne6obosmoihcvsis2lfeixsyi",//宙斯
+        "bafkreiduktovx7unf7bokvzxgrzda2hrgu3de7pynpszvfw762unlencda",//赫拉
+        "bafkreibyuxwcz67dmbfdnyhgnmtptm23pczfr3twwrwh3cixpohbfdrhau",//波塞冬
+        "bafkreigovgvreqjpxhu2kfchppbh2hmcdtbd775tndtsfhpk4c5nmh5b4a",//德墨忒尔
+        "bafkreif4zn5ijeyhhz6ie2ctnb4u3ybrjptfgoco4capzoic5pd2w2nsua",//雅典娜
+        "bafkreialxo2k2arwaulmwtgahhpuhum2jw3thqensx66mg6pofqygsysfq",//阿波罗
+        "bafkreidns6zxngxnxwfhrx4cig7wenslytzhhjy6l4a7sotg256mocieqi",//阿尔忒弥斯
+        "bafkreic6amxiq4e5g7iuf2i6j2i5yxxiorqpsa2cdz4mwwuv4325dpqepu",// 阿瑞斯
+        "bafkreigf5rwrdb4k3gsdypwkewv7tx6hbmomj2yblli6wkwmr2oed2y2sa",//阿芙罗狄忒
+        "bafkreicpymxdsgxbco4lgffaupipdvdlqpqtfkpipuy27hczzrzbedcrv4",//赫菲斯托斯
+        "bafkreic3o6adbxbaau5wrbwtn5sj6uacsl6apoy6svizxewzmcqniawh5q",//赫尔墨斯
+        "bafkreicxsni3jnun2g5xf4mbmqqihnm5h4jdftzcerh2mj5f5dqganmymy",//狄俄尼索斯
     ]
 
     static getPicById(id: number): string {
