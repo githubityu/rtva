@@ -208,7 +208,7 @@ export default function AntdZodiacPage() {
                                                     {zodiacMeta.map(z => {
                                                         const owned = ownedZodiacs.find(o => o.id === z.id)?.balance ?? 0;
                                                         return (
-                                                            <Col key={z.id} xs={8} sm={8} md={6} lg={6}>
+                                                            <Col key={z.id} xs={8} sm={8} md={4} lg={4}>
                                                                 <Flex vertical align="center" gap="small"
                                                                       style={{opacity: owned > 0 ? 1 : 0.3}}>
                                                                     <Badge count={owned} color="blue"
